@@ -25,6 +25,18 @@ describe Spork::Runner do
     Spork::Runner.new(['rspec', '-b'], @out, @err).run
   end
   
+  describe "loads a different helper file when -c is passed in" do
+    after(:each) do
+      Spork::TestFramework.helper_file = nil
+    end
+
+    it "returns --config FILE if available" do
+      Spork::Runner.new(['cuc','-c','fooenv.rb'], @out, @err)
+      Spork::TestFramework::Cucumber.helper_file.should == "fooenv.rb"
+      Spork::TestFramework::RSpec.helper_file.should == "fooenv.rb"
+    end
+  end
+
   it "aborts if it can't preload" do
     use_test_server
     @test_framework.should_receive(:preload).and_return(false)

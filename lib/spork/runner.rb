@@ -25,6 +25,7 @@ module Spork
       opt.on("-d", "--diagnose")  {|ignore| @options[:diagnose] = true }
       opt.on("-h", "--help")  {|ignore| @options[:help] = true }
       opt.on("-p", "--port [PORT]") {|port| @options[:port] = port }
+      opt.on("-c", "--config FILE") {|file| @options[:config] = file }
       non_option_args = args.select { |arg| ! args[0].match(/^-/) }
       @options[:server_matcher] = non_option_args[0]
       opt.parse!(args)
@@ -35,6 +36,8 @@ module Spork
         @output.puts supported_test_frameworks_text
         exit(0)
       end
+
+      Spork::TestFramework.helper_file = @options[:config]
     end
     
     def supported_test_frameworks_text

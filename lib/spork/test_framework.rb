@@ -3,7 +3,12 @@ class Spork::TestFramework
   BOOTSTRAP_FILE = File.dirname(__FILE__) + "/../../assets/bootstrap.rb"
 
   @@supported_test_frameworks = []
+  @@helper_file = nil
   attr_reader :stdout, :stderr
+
+  def self.helper_file=(helper_file)
+    @@helper_file = helper_file
+  end
 
   class FactoryException < Exception; end
 
@@ -50,7 +55,7 @@ class Spork::TestFramework
   end
 
   def self.helper_file
-    self::HELPER_FILE
+    @@helper_file || self::HELPER_FILE
   end
 
   def self.default_port
